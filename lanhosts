@@ -1,0 +1,42 @@
+#!/data/data/com.termux/files/usr/bin/python
+# -*- coding: utf-8 -*-
+import nmap
+import sys
+import time
+
+class wlan0:
+
+	def __init__(self):
+
+		self.ruter = "192.168.0.1"
+		self.range = "/24"
+		self.descover_arg = "-sn"
+		self.scanner = nmap.PortScanner()
+		
+	def write(self, string):
+		"""WRITES STRINGS ON TERMINAL"""
+		for i in string:
+			sys.stdout.write(i)
+			time.sleep(0.01)
+			sys.stdout.flush()
+
+	def get_users (self):
+		"""GETS ACTIVE USERS"""
+		self.write ("\n<----------(\033[32mwlan0 host discover v 0.1\033[0m)-------->")
+		self.write (f"\n\ndefault router ip : \033[32m{self.ruter}\033[0m\n")
+		try:
+			result = self.scanner.scan(hosts= self.ruter + self.range, arguments=self.descover_arg)
+			active_hosts =  result['nmap']['scanstats']['uphosts']
+			hosts_ip = list(result['scan'].keys())
+			self.write (f"\nactive users : \033[32m{active_hosts}\033[0m\n")
+			self.write ("\nusers ip:\n")
+			for i in hosts_ip:
+				self.write (f"\n\033[32m{i}\033[0m")
+			print("\n")
+				
+		except:
+			print ("something went wrong plz try again later")
+
+lan = wlan0()
+if __name__ =="__main__":
+	lan.get_users()
